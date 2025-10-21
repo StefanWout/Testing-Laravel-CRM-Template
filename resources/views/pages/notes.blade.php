@@ -818,4 +818,155 @@
             <!-- [ Main Content ] end -->
         </div>
     
+    <!-- Add Notes Modal -->
+    @include('partials.notes-modal')
+
 @endsection
+
+@push('scripts')
+    <!-- Notes Init -->
+    <script src="{{ asset('assets/js/apps-notes-init.min.js') }}"></script>
+    
+    <script>
+        // Notes functionality
+        $(document).ready(function() {
+            // Remove note function
+            function removeNote() {
+                $(".remove-note").on("click", function(event) {
+                    event.stopPropagation();
+                    $(this).parents(".single-note-item").remove();
+                });
+            }
+
+            // Favourite note function
+            function favouriteNote() {
+                $(".favourite-note").on("click", function(event) {
+                    event.stopPropagation();
+                    $(this).parents(".single-note-item").toggleClass("note-favourite");
+                    $(this).toggleClass("active");
+                });
+            }
+
+            // Add label groups function
+            function addLabelGroups() {
+                $(".category-selector .badge-group-item").on("click", function(event) {
+                    event.preventDefault();
+                    $(this).parents(".single-note-item").removeClass("note-tasks note-works note-social note-archive note-priority note-personal note-business note-important");
+                    $(this).parents(".single-note-item").addClass($(this).attr("href").replace("#", ""));
+                    return false;
+                });
+            }
+
+            // Filter notes by category
+            var $btns = $(".note-link").click(function() {
+                if (this.id == "all-category") {
+                    var $el = $("." + this.id).fadeIn();
+                    $("#note-full-container > div").not($el).hide();
+                }
+                if (this.id == "important") {
+                    var $el = $("." + this.id).fadeIn();
+                    $("#note-full-container > div").not($el).hide();
+                } else {
+                    var $el = $("." + this.id).fadeIn();
+                    $("#note-full-container > div").not($el).hide();
+                }
+                $btns.removeClass("active");
+                $(this).addClass("active");
+            });
+
+            // Open add notes modal
+            $("#add-notes").on("click", function(event) {
+                $("#addnotesmodal").modal("show");
+                $("#btn-n-save").hide();
+                $("#btn-n-add").show();
+            });
+
+            // Add new note
+            $("#btn-n-add").on("click", function(event) {
+                event.preventDefault();
+                
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, "0");
+                var mm = String(today.getMonth());
+                var yyyy = today.getFullYear();
+                var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                today = dd + " " + monthNames[mm] + " " + yyyy;
+
+                var $_noteTitle = document.getElementById("note-has-title").value;
+                var $_noteDescription = document.getElementById("note-has-description").value;
+
+                var $html = '<div class="col-xxl-4 col-xl-6 col-lg-4 col-sm-6 single-note-item all-category">' +
+                    '<div class="card card-body mb-4 stretch stretch-full">' +
+                    '<span class="side-stick"></span>' +
+                    '<h5 class="note-title text-truncate w-75 mb-1" data-noteHeading="' + $_noteTitle + '">' + $_noteTitle + '<i class="point bi bi-circle-fill ms-1 fs-7"></i></h5>' +
+                    '<p class="fs-11 text-muted note-date">' + today + '</p>' +
+                    '<div class="note-content flex-grow-1">' +
+                    '<p class="text-muted note-inner-content text-truncate-3-line" data-noteContent="' + $_noteDescription + '">' + $_noteDescription + '</p>' +
+                    '</div>' +
+                    '<div class="d-flex align-items-center gap-1">' +
+                    '<span class="avatar-text avatar-sm"><i class="feather-star favourite-note"></i></span>' +
+                    '<span class="avatar-text avatar-sm"><i class="feather-trash-2 remove-note"></i></span>' +
+                    '<div class="ms-auto">' +
+                    '<div class="dropdown btn-group category-selector">' +
+                    '<a class="nav-link dropdown-toggle category-dropdown label-group p-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">' +
+                    '<div class="category">' +
+                    '<div class="category-business"></div>' +
+                    '<div class="category-social"></div>' +
+                    '<div class="category-important"></div>' +
+                    '</div>' +
+                    '</a>' +
+                    '<div class="dropdown-menu dropdown-menu-right category-menu">' +
+                    '<a class="note-tasks badge-group-item badge-tasks dropdown-item position-relative category-tasks" href="javascript:void(0);"><span class="wd-5 ht-5 bg-danger rounded-circle me-3"></span>Tasks </a>' +
+                    '<a class="note-works badge-group-item badge-works dropdown-item position-relative category-works" href="javascript:void(0);"><span class="wd-5 ht-5 bg-primary rounded-circle me-3"></span>Works </a>' +
+                    '<a class="note-social badge-group-item badge-social dropdown-item position-relative category-social" href="javascript:void(0);"><span class="wd-5 ht-5 bg-info rounded-circle me-3"></span>Social </a>' +
+                    '<a class="note-archive badge-group-item badge-archive dropdown-item position-relative category-archive" href="javascript:void(0);"><span class="wd-5 ht-5 bg-dark rounded-circle me-3"></span>Archive </a>' +
+                    '<a class="note-priority badge-group-item badge-priority dropdown-item position-relative category-priority" href="javascript:void(0);"><span class="wd-5 ht-5 bg-danger rounded-circle me-3"></span>Priority </a>' +
+                    '<a class="note-personal badge-group-item badge-personal dropdown-item position-relative category-personal" href="javascript:void(0);"><span class="wd-5 ht-5 bg-primary rounded-circle me-3"></span>Personal </a>' +
+                    '<a class="note-business badge-group-item badge-business dropdown-item position-relative category-business" href="javascript:void(0);"><span class="wd-5 ht-5 bg-warning rounded-circle me-3"></span>Business </a>' +
+                    '<a class="note-important badge-group-item badge-important dropdown-item position-relative category-important" href="javascript:void(0);"><span class="wd-5 ht-5 bg-success rounded-circle me-3"></span>Important </a>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div></div>';
+
+                $("#note-full-container").prepend($html);
+                $("#addnotesmodal").modal("hide");
+
+                removeNote();
+                favouriteNote();
+                addLabelGroups();
+            });
+
+            // Clear modal on close
+            $("#addnotesmodal").on("hidden.bs.modal", function(event) {
+                event.preventDefault();
+                document.getElementById("note-has-title").value = "";
+                document.getElementById("note-has-description").value = "";
+            });
+
+            // Initialize functions
+            removeNote();
+            favouriteNote();
+            addLabelGroups();
+
+            // Enable/disable add button based on title input
+            $("#btn-n-add").attr("disabled", "disabled");
+
+            $("#note-has-title").keyup(function() {
+                var empty = false;
+                $("#note-has-title").each(function() {
+                    if ($(this).val() == "") {
+                        empty = true;
+                    }
+                });
+
+                if (empty) {
+                    $("#btn-n-add").attr("disabled", "disabled");
+                } else {
+                    $("#btn-n-add").removeAttr("disabled");
+                }
+            });
+        });
+    </script>
+@endpush

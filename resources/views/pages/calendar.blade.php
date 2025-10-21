@@ -1,5 +1,13 @@
 @extends('layouts.app')
 
+@push('styles')
+    <!-- TUI Calendar CSS -->
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendors/css/tui-calendar.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendors/css/tui-theme.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendors/css/tui-time-picker.min.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendors/css/tui-date-picker.min.css') }}">
+@endpush
+
 @section('content')
 
         <div class="nxl-content without-header nxl-full-content">
@@ -330,3 +338,18 @@
         </div>
     
 @endsection
+
+@push('scripts')
+    <!-- TUI Calendar JS -->
+    <script src="{{ asset('assets/vendors/js/tui-code-snippet.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/tui-time-picker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/tui-date-picker.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/chance.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/tui-calendar.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/tui-calendars.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/tui-schedules.min.js') }}"></script>
+    <script src="{{ asset('assets/vendors/js/tui-calendar-init.min.js') }}"></script>
+    <!-- Calendar Init -->
+    <script src="{{ asset('assets/js/apps-calendar-init.min.js') }}"></script>
+@endpush
